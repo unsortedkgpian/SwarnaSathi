@@ -23,6 +23,8 @@ const jobOpeningRoutes = require("./routes/jobOpenings.routes.js");
 const path = require("path");
 const contactUsRoutes = require("./routes/contactUs.routes.js");
 const socialMediaRoutes = require("./routes/SocialMedia.routes.js");
+const testimonialRoutes = require("./routes/testimonial.routes.js");
+const storeLocationRoutes = require("./routes/storeLocation.routes.js");
 // const ContactUs = require("./models/ContactUs.js");
 dotenv.config();
 // const cors = require("cors");
@@ -54,6 +56,9 @@ app.use("/api/be-our-partner", beOurPartnerRoutes);
 app.use("/api/job-openings", jobOpeningRoutes);
 app.use("/api/contact-us", contactUsRoutes);
 app.use("/api/social", socialMediaRoutes);
+app.use("/api/testimonials", testimonialRoutes);
+app.use("/api/store-locations", storeLocationRoutes);
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({

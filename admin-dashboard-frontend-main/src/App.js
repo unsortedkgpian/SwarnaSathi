@@ -39,6 +39,8 @@ import StoreLocationList from "./components/store-locations/StoreLocationList";
 import StoreLocationForm from "./components/store-locations/StoreLocationForm";
 import ContactUs from "./components/contactus/ContactUs";
 import SocialMedia from "./components/social-media/SocialMedia";
+import TestimonialForm from "./components/testimonial/TestimonialForm";
+import TestimonialList from "./components/testimonial/TestimonialList";
 
 function App() {
     const { auth, loading } = useContext(AuthContext);
@@ -176,6 +178,18 @@ function App() {
                             <Route
                                 path="social-link"
                                 element={<SocialMedia />}
+                            />
+                            <Route
+                                path="testimonials"
+                                element={<TestimonialList />}
+                            />
+                            <Route
+                                path="testimonial/new"
+                                element={<TestimonialForm />}
+                            />
+                            <Route
+                                path="testimonial/edit/:id"
+                                element={<TestimonialForm />}
                             />
                         </>
                     )}

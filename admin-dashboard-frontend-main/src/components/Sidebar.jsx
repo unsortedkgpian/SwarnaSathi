@@ -321,6 +321,19 @@ export default function Sidebar() {
                                         <Globe size={20} />
                                         <span>Social Media</span>
                                     </Link>
+                                    <Link
+                                        to="/dashboard/testimonials"
+                                        className={`flex items-center space-x-2 px-4 py-3 hover:bg-gray-600 ${
+                                            location.pathname.startsWith(
+                                                "/dashboard/testimonials"
+                                            )
+                                                ? "bg-gray-600"
+                                                : ""
+                                        }`}
+                                    >
+                                        <MessagesSquare size={20} />
+                                        <span>Testimoinials</span>
+                                    </Link>
                                 </>
                             )}
                         </nav>
