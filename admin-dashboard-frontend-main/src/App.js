@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
 import LoginForm from "./components/LoginForm";
 import Dashboard from "./components/Dashboard";
-import RegisterForm from "./components/RegisterForm";
+// import RegisterForm from "./components/RegisterForm";
 import CategoryList from "./components/categories/CategoryList";
 import CategoryForm from "./components/categories/CategoryForm";
 import BannerList from "./components/banners/BannerList";
@@ -41,6 +41,8 @@ import ContactUs from "./components/contactus/ContactUs";
 import SocialMedia from "./components/social-media/SocialMedia";
 import TestimonialForm from "./components/testimonial/TestimonialForm";
 import TestimonialList from "./components/testimonial/TestimonialList";
+import RegistrationForm from "./components/registration/RegistrationForm"
+
 
 function App() {
     const { auth, loading } = useContext(AuthContext);
@@ -190,6 +192,10 @@ function App() {
                             <Route
                                 path="testimonial/edit/:id"
                                 element={<TestimonialForm />}
+                            />
+                            <Route
+                                path="registration"
+                                element={<RegistrationForm/>}
                             />
                         </>
                     )}

@@ -334,6 +334,19 @@ export default function Sidebar() {
                                         <MessagesSquare size={20} />
                                         <span>Testimoinials</span>
                                     </Link>
+                                    <Link
+                                        to="/dashboard/registration"
+                                        className={`flex items-center space-x-2 px-4 py-3 hover:bg-gray-600 ${
+                                            location.pathname.startsWith(
+                                                "/dashboard/registration"
+                                            )
+                                                ? "bg-gray-600"
+                                                : ""
+                                        }`}
+                                    >
+                                        <MessagesSquare size={20} />
+                                        <span>FormData</span>
+                                    </Link>
                                 </>
                             )}
                         </nav>

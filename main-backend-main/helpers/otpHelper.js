@@ -20,7 +20,7 @@ const sendOTP = async (phone, otp) => {
           : phone;
       
       // Create the message
-      const message =otp + `-is your six digit otp for Swarn Sathi mobile verification`;
+      const message =otp + ` -is your six digit otp for Swarn Sathi mobile verification`;
       
       // Encode the message for URL
       const encodedMessage = encodeURIComponent(message);
