@@ -26,6 +26,7 @@ const socialMediaRoutes = require("./routes/SocialMedia.routes.js");
 const testimonialRoutes = require("./routes/testimonial.routes.js");
 const storeLocationRoutes = require("./routes/storeLocation.routes.js");
 const registrationRoutes = require("./routes/registration.routes.js");
+const applicationRoutes = require("./routes/application.routes.js");
 dotenv.config();
 // const cors = require("cors");
 
@@ -59,6 +60,7 @@ app.use("/api/social", socialMediaRoutes);
 app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/store-locations", storeLocationRoutes);
 app.use("/api/registration", registrationRoutes);
+app.use("/api/application", applicationRoutes);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

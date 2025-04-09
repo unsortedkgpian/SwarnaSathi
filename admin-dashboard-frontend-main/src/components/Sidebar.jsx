@@ -347,6 +347,19 @@ export default function Sidebar() {
                                         <MessagesSquare size={20} />
                                         <span>FormData</span>
                                     </Link>
+                                    <Link
+                                        to="/dashboard/application"
+                                        className={`flex items-center space-x-2 px-4 py-3 hover:bg-gray-600 ${
+                                            location.pathname.startsWith(
+                                                "/dashboard/application"
+                                            )
+                                                ? "bg-gray-600"
+                                                : ""
+                                        }`}
+                                    >
+                                        <MessagesSquare size={20} />
+                                        <span>Application</span>
+                                    </Link>
                                 </>
                             )}
                         </nav>

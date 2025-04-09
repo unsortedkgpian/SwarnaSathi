@@ -81,6 +81,28 @@ exports.updateTestimonial = async (req, res) => {
 };
 
 // Delete testimonial
+// exports.deleteTestimonial = async (req, res) => {
+//     try {
+//         const testimonial = await Testimonial.findById(req.params.id);
+//         if (!testimonial) {
+//             return res.status(404).json({ message: "Testimonial not found" });
+//         }
+
+//         // Delete image from storage
+//         fs.unlink(testimonial.img, (err) => {
+//             if (err) console.log("Error deleting image:", err);
+//         });
+
+//         await Testimonial.findByIdAndDelete(req.params.id);
+//         res.json({ message: "Testimonial deleted successfully" });
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
+
+// const fs = require("fs");
+// const path = require("path");
+
 exports.deleteTestimonial = async (req, res) => {
     try {
         const testimonial = await Testimonial.findById(req.params.id);
@@ -88,10 +110,22 @@ exports.deleteTestimonial = async (req, res) => {
             return res.status(404).json({ message: "Testimonial not found" });
         }
 
-        // Delete image from storage
-        fs.unlink(testimonial.img, (err) => {
-            if (err) console.log("Error deleting image:", err);
-        });
+        // Delete image from storage if it exists
+        if (testimonial.img) {
+            const imgPath = path.join(
+                __dirname,
+                "..",
+                "path-to-your-image-folder",
+                testimonial.img
+            );
+            fs.unlink(imgPath, (err) => {
+                if (err) {
+                    console.log("Error deleting image:", err);
+                } else {
+                    console.log("Image deleted:", testimonial.img);
+                }
+            });
+        }
 
         await Testimonial.findByIdAndDelete(req.params.id);
         res.json({ message: "Testimonial deleted successfully" });

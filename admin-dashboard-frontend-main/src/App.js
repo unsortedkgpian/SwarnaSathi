@@ -42,6 +42,8 @@ import SocialMedia from "./components/social-media/SocialMedia";
 import TestimonialForm from "./components/testimonial/TestimonialForm";
 import TestimonialList from "./components/testimonial/TestimonialList";
 import RegistrationForm from "./components/registration/RegistrationForm"
+import ApplicationList from "./components/application/ApplicationList";
+import ApplicationForm from "./components/application/ApplicationForm";
 
 
 function App() {
@@ -195,7 +197,16 @@ function App() {
                             />
                             <Route
                                 path="registration"
-                                element={<RegistrationForm/>}
+                                element={<RegistrationForm />}
+                            />
+                            <Route
+                                path="application"
+                                element={<ApplicationList />}
+                            />
+                            
+                            <Route
+                                path="application/:id"
+                                element={<ApplicationForm />}
                             />
                         </>
                     )}
