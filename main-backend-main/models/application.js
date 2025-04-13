@@ -52,8 +52,10 @@ const applicationSchema = new mongoose.Schema({
         },
     ],
     resume: {
-        type: String,
-        required: false, // true
+        filename: String,     // Original filename
+        path: String,        // Path where file is stored
+        mimetype: String,    // File type
+        size: Number         // File size in bytes
     },
     workExperience: [
         {

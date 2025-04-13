@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const applicationController = require("../controllers/applicationController");
-const upload = require("../utils/FileUpload");
+// const upload = require("../utils/FileUpload");
+const upload = require("../helpers/fileUploads");
 
 // POST - Create new application
 router.post(

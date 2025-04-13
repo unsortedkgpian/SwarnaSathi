@@ -44,6 +44,7 @@ import TestimonialList from "./components/testimonial/TestimonialList";
 import RegistrationForm from "./components/registration/RegistrationForm"
 import ApplicationList from "./components/application/ApplicationList";
 import ApplicationForm from "./components/application/ApplicationForm";
+import ApplicationView from "./components/application/ApplicationView";
 
 
 function App() {
@@ -207,6 +208,10 @@ function App() {
                             <Route
                                 path="application/:id"
                                 element={<ApplicationForm />}
+                            />
+                            <Route
+                                path="application/view/:id/"
+                                element={<ApplicationView />}
                             />
                         </>
                     )}

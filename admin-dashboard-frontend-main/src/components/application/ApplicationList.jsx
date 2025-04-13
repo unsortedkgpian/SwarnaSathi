@@ -2,7 +2,7 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2, FileText } from "lucide-react";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function ApplicationList() {
@@ -46,6 +46,16 @@ export default function ApplicationList() {
         }
     };
 
+    const handleViewResume = (application) => {
+        if (application?.resume?.path) {
+            // Directly use the file path from backend
+            const resumeUrl = `${url}/${application.resume.path}`;
+            window.open(resumeUrl, '_blank');
+        } else {
+            alert('Resume not found');
+        }
+    };
+
     if (loading) return <div className="text-center p-6">Loading...</div>;
     if (error) return <div className="text-red-700 p-6">{error}</div>;
 
@@ -77,7 +87,7 @@ export default function ApplicationList() {
                                 Applied Date
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                                Status
+                                Resume
                             </th>
                             <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                                 Actions
@@ -118,11 +128,45 @@ export default function ApplicationList() {
                                         ).toLocaleDateString()}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            New
-                                        </span>
+                                        {application.resume ? (
+                                            <div className="flex items-center">
+                                                <div>
+                                                    <span className="text-sm text-gray-900">
+                                                        {application.resume.originalName}
+                                                    </span>
+                                                    <div className="text-xs text-gray-500">
+                                                        {Math.round(application.resume.size / 1024)} KB
+                                                        {application.resume.mimeType && (
+                                                            <> • {application.resume.mimeType.split('/')[1].toUpperCase()}</>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleViewResume(application)}
+                                                    className="ml-2 text-blue-600 hover:text-blue-900"
+                                                    title="View Resume"
+                                                >
+                                                    <FileText className="h-4 w-4" />
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <span className="text-sm text-red-500">
+                                                No resume
+                                            </span>
+                                        )}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button
+                                            onClick={() =>
+                                                navigate(
+                                                    `/dashboard/application/view/${application._id}`
+                                                )
+                                            }
+                                            className="text-blue-600 hover:text-blue-900 mr-4"
+                                            title="View Details"
+                                        >
+                                            <Eye className="h-5 w-5" />
+                                        </button>
                                         <button
                                             onClick={() =>
                                                 navigate(
@@ -130,6 +174,7 @@ export default function ApplicationList() {
                                                 )
                                             }
                                             className="text-indigo-600 hover:text-indigo-900 mr-4"
+                                            title="Edit"
                                         >
                                             <Pencil className="h-5 w-5" />
                                         </button>
@@ -138,6 +183,7 @@ export default function ApplicationList() {
                                                 handleDelete(application._id)
                                             }
                                             className="text-red-600 hover:text-red-900"
+                                            title="Delete"
                                         >
                                             <Trash2 className="h-5 w-5" />
                                         </button>
