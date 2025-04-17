@@ -101,6 +101,7 @@ exports.sendPhoneOTP = async (phone) => {
     
     // Send OTP via TextLocal
     const result = await sendOTP(phone, otp);
+    console.log("OTP sent successfully:", result);
     return result;
   } catch (error) {
     console.error('Error in sendPhoneOTP:', error);

@@ -46,10 +46,6 @@ export default function JobOpeningForm() {
       setError('Location is required');
       return false;
     }
-    if (!formData.googleSheetLink.trim()) {
-      setError('Google Sheet Link is required');
-      return false;
-    }
     return true;
   };
 

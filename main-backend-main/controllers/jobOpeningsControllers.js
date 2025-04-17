@@ -4,15 +4,15 @@ const JobOpening = require('../models/JobOpenings');
 exports.createJobOpening = async (req, res) => {
   try {
     const { jobName, role, location, googleSheetLink } = req.body;
-    if (!jobName || !role || !location || !googleSheetLink) {
-      return res.status(400).json({ message: 'All fields (jobName, role, location, googleSheetLink) are required' });
+    if (!jobName || !role || !location) {
+      return res.status(400).json({ message: 'All fields (jobName, role, location) are required' });
     }
 
     const jobOpening = new JobOpening({
       jobName,
       role,
       location,
-      googleSheetLink
+      googleSheetLink: googleSheetLink || null
     });
 
     const savedJobOpening = await jobOpening.save();

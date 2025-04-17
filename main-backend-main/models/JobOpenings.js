@@ -18,7 +18,6 @@ const jobOpeningSchema = new mongoose.Schema({
   },
   googleSheetLink: {
     type: String,
-    required: true,
     trim: true,
     match: /^https:\/\/docs\.google\.com\/spreadsheets\/d\/[a-zA-Z0-9_-]+/ // Basic Google Sheets URL validation
   },

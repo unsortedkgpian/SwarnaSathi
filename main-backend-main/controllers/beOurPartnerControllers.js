@@ -133,8 +133,6 @@ exports.sendOTP = async (req, res) => {
                 return res.status(200).json({
                     success: true,
                     message: "OTP sent successfully",
-                    // Return OTP in development mode for easier testing
-                    ...(process.env.NODE_ENV !== "production" && { otp }),
                 });
             } catch (smsError) {
                 console.error("SMS Sending Error:", smsError.message);
@@ -144,8 +142,6 @@ exports.sendOTP = async (req, res) => {
                     success: true,
                     message:
                         "OTP generated successfully but SMS delivery failed. Check console for OTP.",
-                    // Always return OTP for now until SMS is fixed
-                    otp: otp,
                 });
             }
         } catch (error) {
