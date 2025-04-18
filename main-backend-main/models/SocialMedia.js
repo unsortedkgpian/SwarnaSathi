@@ -26,7 +26,7 @@ const socialMediaSchema = new mongoose.Schema({
 });
 
 // Method to update contact details
-socialMediaSchema.methods.updateSoicalMedia = async function (newDetails) {
+socialMediaSchema.methods.updateSocialMedia = async function (newDetails) {
     Object.assign(this, newDetails);
     await this.save();
 };
