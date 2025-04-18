@@ -14,6 +14,7 @@ router.post('/logout', beOurPartnerControllers.logout);
 
 // Protected routes - authentication required
 router.get('/get-me', protect, beOurPartnerControllers.getMe);
+router.get('/my-applications', protect, beOurPartnerControllers.getMyApplications);
 router.get('/', protect, beOurPartnerControllers.getAllSubmissions);
 router.get('/:id', protect, beOurPartnerControllers.getSubmission);
 router.put('/:id', protect, beOurPartnerControllers.updateSubmission);
