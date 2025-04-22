@@ -20,6 +20,7 @@ import {
     MessagesSquare,
     Phone,
     Globe,
+    Gem,
 } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 
@@ -359,6 +360,19 @@ export default function Sidebar() {
                                     >
                                         <MessagesSquare size={20} />
                                         <span>Application</span>
+                                    </Link>
+                                    <Link
+                                        to="/dashboard/goldrate"
+                                        className={`flex items-center space-x-2 px-4 py-3 hover:bg-gray-600 ${
+                                            location.pathname.startsWith(
+                                                "/dashboard/goldrate"
+                                            )
+                                                ? "bg-gray-600"
+                                                : ""
+                                        }`}
+                                    >
+                                        <Gem size={20} />
+                                        <span>Gold Rate</span>
                                     </Link>
                                 </>
                             )}

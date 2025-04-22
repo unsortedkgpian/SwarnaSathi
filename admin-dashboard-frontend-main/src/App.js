@@ -45,6 +45,7 @@ import RegistrationForm from "./components/registration/RegistrationForm"
 import ApplicationList from "./components/application/ApplicationList";
 import ApplicationForm from "./components/application/ApplicationForm";
 import ApplicationView from "./components/application/ApplicationView";
+import GoldRate from "./components/goldrate/GoldRate";
 
 
 function App() {
@@ -212,6 +213,10 @@ function App() {
                             <Route
                                 path="application/view/:id/"
                                 element={<ApplicationView />}
+                            />
+                            <Route
+                                path="goldrate"
+                                element={<GoldRate/>}
                             />
                         </>
                     )}
