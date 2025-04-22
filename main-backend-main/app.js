@@ -27,8 +27,8 @@ const testimonialRoutes = require("./routes/testimonial.routes.js");
 const storeLocationRoutes = require("./routes/storeLocation.routes.js");
 const registrationRoutes = require("./routes/registration.routes.js");
 const applicationRoutes = require("./routes/application.routes.js");
+const goldRateRoutes = require("./routes/goldrate.routes.js"); // <-- Added this import
 dotenv.config();
-// const cors = require("cors");
 
 const app = express();
 app.use(cors({ origin: "*" }));
@@ -37,6 +37,8 @@ connectDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// Route definitions
 app.use("/api/auth", userRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api", bannerRoutes);
@@ -61,6 +63,9 @@ app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/store-locations", storeLocationRoutes);
 app.use("/api/registration", registrationRoutes);
 app.use("/api/application", applicationRoutes);
+
+// ** Add Gold Rate Routes **
+app.use("/api/goldrate", goldRateRoutes); // <-- Added this line
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
