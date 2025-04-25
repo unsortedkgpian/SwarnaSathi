@@ -22,7 +22,7 @@ async function fetchFromMetalPrice(accessToken, basecurrency) {
                 api_key: accessToken
             }
         });
-        const rateKey = `${basecurrency}XAU`;
+        const rateKey = "INRXAU";
 
         const rawRatePerOunce = response.data?.rates?.[rateKey];
 
