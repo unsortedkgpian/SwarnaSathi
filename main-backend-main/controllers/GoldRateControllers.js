@@ -102,24 +102,24 @@ exports.getGoldRateSettings = async (req, res) => {
 
         const { merchant, rate, timestamp, apiaccesstoken, basecurrency } = settings;
 
-        if (!timestamp || isMoreThan24Hours(timestamp)) {
-            const newRate = await fetchFromMetalPrice(apiaccesstoken,basecurrency);
+        // if (!timestamp || isMoreThan24Hours(timestamp)) {
+        //     const newRate = await fetchFromMetalPrice(apiaccesstoken,basecurrency);
 
-            settings.rate = newRate;
-            settings.timestamp = new Date();
+        //     settings.rate = newRate;
+        //     settings.timestamp = new Date();
 
-            await settings.save();
+        //     await settings.save();
 
-            return res.status(200).json({
-                success: true,
-                source: "API",
-                merchant: merchant,
-                basecurrency: basecurrency,
-                apiaccesstoken: apiaccesstoken,
-                rate: newRate,
-                timestamp: settings.timestamp
-            });
-        }
+        //     return res.status(200).json({
+        //         success: true,
+        //         source: "API",
+        //         merchant: merchant,
+        //         basecurrency: basecurrency,
+        //         apiaccesstoken: apiaccesstoken,
+        //         rate: newRate,
+        //         timestamp: settings.timestamp
+        //     });
+        // }
 
         return res.status(200).json({
             success: true,
