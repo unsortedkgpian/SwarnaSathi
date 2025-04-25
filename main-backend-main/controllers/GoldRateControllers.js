@@ -116,9 +116,9 @@ exports.getGoldRateSettings = async (req, res) => {
             return res.status(200).json({
                 success: true,
                 source: "API",
-                merchant,
-                basecurrency,
-                apiaccesstoken,
+                // merchant,
+                // basecurrency,
+                // apiaccesstoken,
                 rate: finalRate,
                 timestamp: settings.timestamp
             });
@@ -126,10 +126,10 @@ exports.getGoldRateSettings = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            merchant,
-            basecurrency,
-            apiaccesstoken,
-            source: "Database",
+            // merchant,
+            // basecurrency,
+            // apiaccesstoken,
+            // source: "Database",
             rate,
             timestamp
         });
