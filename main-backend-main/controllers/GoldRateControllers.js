@@ -22,9 +22,11 @@ async function fetchFromMetalPrice(accessToken, basecurrency) {
                 api_key: accessToken
             }
         });
-        const rateKey = "INRXAU";
+        console.log("MetalPrice API response:", response.data);
 
-        const rawRatePerOunce = response.data?.rates?.[rateKey];
+        // const rateKey = "INRXAU";
+
+        const rawRatePerOunce = response.data?.rates?.[basecurrency];
 
         if (!rawRatePerOunce) throw new Error("Rate not found in API response");
 
@@ -103,33 +105,33 @@ exports.getGoldRateSettings = async (req, res) => {
 
         const { merchant, rate, timestamp, apiaccesstoken, basecurrency } = settings;
 
-        // if (!timestamp || isMoreThan24Hours(timestamp)) {
-        //     const newRate = await fetchFromMetalPrice(apiaccesstoken,basecurrency);
+        if (!timestamp || isMoreThan24Hours(timestamp)) {
+            const { rate: finalRate } = await fetchFromMetalPrice(apiaccesstoken, basecurrency);
 
-        //     settings.rate = newRate;
-        //     settings.timestamp = new Date();
+            settings.rate = finalRate; // Save only the numeric rate
+            settings.timestamp = new Date();
 
-        //     await settings.save();
+            await settings.save();
 
-        //     return res.status(200).json({
-        //         success: true,
-        //         source: "API",
-        //         merchant: merchant,
-        //         basecurrency: basecurrency,
-        //         apiaccesstoken: apiaccesstoken,
-        //         rate: newRate,
-        //         timestamp: settings.timestamp
-        //     });
-        // }
+            return res.status(200).json({
+                success: true,
+                source: "API",
+                merchant,
+                basecurrency,
+                apiaccesstoken,
+                rate: finalRate,
+                timestamp: settings.timestamp
+            });
+        }
 
         return res.status(200).json({
             success: true,
-            merchant: merchant,
-            basecurrency: basecurrency,
-            apiaccesstoken: apiaccesstoken,
+            merchant,
+            basecurrency,
+            apiaccesstoken,
             source: "Database",
-            rate: rate,
-            timestamp: timestamp
+            rate,
+            timestamp
         });
     } catch (error) {
         console.error("Error fetching or refreshing gold rate:", error.message);
