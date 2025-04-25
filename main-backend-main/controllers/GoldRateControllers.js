@@ -31,8 +31,8 @@ async function fetchFromMetalPrice(accessToken, basecurrency) {
         const troyOunceToGram = 31.1035;
 
         // Calculate pure per-gram rates (without markup)
-        const markupMultiplier = 1.085; // Simulate Indian retail market
-        const ratePerGram24K = (rawRatePerOunce / troyOunceToGram) * markupMultiplier;
+        ; // Simulate Indian retail market
+        const ratePerGram24K = (rawRatePerOunce / troyOunceToGram)
         
 
 
