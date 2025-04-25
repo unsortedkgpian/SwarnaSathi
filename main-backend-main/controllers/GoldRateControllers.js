@@ -22,17 +22,18 @@ async function fetchFromMetalPrice(accessToken, basecurrency) {
                 api_key: accessToken
             }
         });
+        const rateKey = `${basecurrency}XAU`;
 
-
-        const rawRatePerOunce = response.data?.rates?.[basecurrency];
+        const rawRatePerOunce = response.data?.rates?.[rateKey];
 
         if (!rawRatePerOunce) throw new Error("Rate not found in API response");
 
         const troyOunceToGram = 31.1035;
 
         // Calculate pure per-gram rates (without markup)
-        ; // Simulate Indian retail market
-        const ratePerGram24K = (rawRatePerOunce / troyOunceToGram)
+         // Simulate Indian retail market
+        const markupMultiplier = 1.085;
+        const ratePerGram24K = (rawRatePerOunce / troyOunceToGram) * markupMultiplier;
         
 
 
@@ -102,24 +103,24 @@ exports.getGoldRateSettings = async (req, res) => {
 
         const { merchant, rate, timestamp, apiaccesstoken, basecurrency } = settings;
 
-        // if (!timestamp || isMoreThan24Hours(timestamp)) {
-        //     const newRate = await fetchFromMetalPrice(apiaccesstoken,basecurrency);
+        if (!timestamp || isMoreThan24Hours(timestamp)) {
+            const newRate = await fetchFromMetalPrice(apiaccesstoken,basecurrency);
 
-        //     settings.rate = newRate;
-        //     settings.timestamp = new Date();
+            settings.rate = newRate;
+            settings.timestamp = new Date();
 
-        //     await settings.save();
+            await settings.save();
 
-        //     return res.status(200).json({
-        //         success: true,
-        //         source: "API",
-        //         merchant: merchant,
-        //         basecurrency: basecurrency,
-        //         apiaccesstoken: apiaccesstoken,
-        //         rate: newRate,
-        //         timestamp: settings.timestamp
-        //     });
-        // }
+            return res.status(200).json({
+                success: true,
+                source: "API",
+                merchant: merchant,
+                basecurrency: basecurrency,
+                apiaccesstoken: apiaccesstoken,
+                rate: newRate,
+                timestamp: settings.timestamp
+            });
+        }
 
         return res.status(200).json({
             success: true,
