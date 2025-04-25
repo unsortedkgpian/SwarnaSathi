@@ -23,6 +23,7 @@ async function fetchFromMetalPrice(accessToken, basecurrency) {
             }
         });
 
+
         const rawRatePerOunce = response.data?.rates?.[basecurrency];
 
         if (!rawRatePerOunce) throw new Error("Rate not found in API response");
@@ -131,8 +132,10 @@ exports.getGoldRateSettings = async (req, res) => {
         });
     } catch (error) {
         console.error("Error fetching or refreshing gold rate:", error.message);
+        let settings = await GoldRate.findOne();
         return res.status(500).json({
             success: false,
+            data: settings,
             message: "Failed to get or refresh gold rate",
             error: error.message
         });
