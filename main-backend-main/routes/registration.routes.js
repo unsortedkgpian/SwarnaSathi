@@ -12,5 +12,6 @@ const RegistrationController = require("../controllers/registrationController");
 
 router.get("/", RegistrationController.getAllRegistrations);
 router.post("/", RegistrationController.createRegistration);
+router.delete("/phone/:phone", RegistrationController.deleteRegistrationByPhone);
 
 module.exports = router;
