@@ -32,6 +32,8 @@ const goldRateRoutes = require("./routes/goldrate.routes.js"); // <-- Added this
 const loanFormRoutes = require("./routes/loanForm.routes.js")
 const partnerFormRoutes = require("./routes/partnerForm.routes.js")
 
+const referralRoutes = require("./routes/referral.routes.js")
+
 
 dotenv.config();
 
@@ -72,15 +74,13 @@ app.use("/api/application", applicationRoutes);
 // ** Add Gold Rate Routes **
 app.use("/api/goldrate", goldRateRoutes); // <-- Added this line
 
-
-
-
 /*
 onsite refactoring
 */
 
 app.use("/api/loan-form", loanFormRoutes)
 app.use("/api/partner-form", partnerFormRoutes)
+app.use("/api/referrals", referralRoutes)
 
 
 app.use((err, req, res, next) => {
