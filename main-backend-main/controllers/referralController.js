@@ -1,4 +1,5 @@
 const Referral = require("../models/Referrals");
+const axios = require("axios");
 
 /**
  * Create a new referral code
@@ -193,6 +194,7 @@ exports.getReferralByCode = async (req, res) => {
  * Get referrals by referer phone
  * @route GET /api/referrals/phone/:phone
  */
+
 exports.getReferralsByPhone = async (req, res) => {
     try {
         const { phone } = req.params;
@@ -204,13 +206,51 @@ exports.getReferralsByPhone = async (req, res) => {
             });
         }
 
-        const referrals = await Referral.find({ 
-            refererPhone: phone.trim() 
+        const trimmedPhone = phone.trim();
+
+        let referrals = await Referral.find({ 
+            refererPhone: trimmedPhone 
         }).select("-__v").sort({ createdAt: -1 });
 
-        res.status(200).json({
+        // If no referrals found, create one
+        if (referrals.length === 0) {
+            const firstFiveDigits = trimmedPhone.substring(0, 5);
+            const referralId = `SWARN${firstFiveDigits}`;
+
+            try {
+                const createResponse = await axios.post(
+                    "https://api.swarnsathi.com/api/referrals/",
+                    {
+                        referralId,
+                        refererPhone: trimmedPhone,
+                    }
+                );
+
+                const createdReferral = createResponse.data.data;
+
+                return res.status(201).json({
+                    success: true,
+                    count: 0,
+                    referralId: createdReferral.referralId,
+                    data: [], // no referred users yet
+                    message: "Referral created as none existed before",
+                });
+            } catch (creationError) {
+                console.error("Error creating referral:", creationError?.response?.data || creationError.message);
+                return res.status(500).json({
+                    success: false,
+                    message: "Failed to create referral for this phone number",
+                });
+            }
+        }
+
+        // Use the referralId from the first referral (all share same refererPhone)
+        const referralId = referrals[0].referralId;
+
+        return res.status(200).json({
             success: true,
             count: referrals.length,
+            referralId,
             data: referrals,
         });
     } catch (error) {
