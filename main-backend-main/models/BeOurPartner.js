@@ -5,7 +5,7 @@ const formSubmissionSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    default: 'swarna-sathi'
+    default: 'swarn sathi'
   },
   name: {
     type: String,

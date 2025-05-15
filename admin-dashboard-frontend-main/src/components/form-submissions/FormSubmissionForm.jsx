@@ -12,7 +12,7 @@ export default function FormSubmissionForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
-    type: 'swarna-sathi',
+    type: 'swarn sathi',
     name: '',
     phone: '',
     pincode: '',
@@ -127,7 +127,7 @@ export default function FormSubmissionForm() {
             onChange={handleChange}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           >
-            <option value="swarna-sathi">Swarna Sathi</option>
+            <option value="swarn-sathi">Swarn Sathi</option>
             <option value="business-associate">Business Associate</option>
             <option value="lending-partner">Lending Partner</option>
           </select>
