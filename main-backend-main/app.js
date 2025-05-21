@@ -28,6 +28,7 @@ const storeLocationRoutes = require("./routes/storeLocation.routes.js");
 const registrationRoutes = require("./routes/registration.routes.js");
 const applicationRoutes = require("./routes/application.routes.js");
 const goldRateRoutes = require("./routes/goldrate.routes.js"); // <-- Added this import
+const leadRoutes = require('./routes/lead.routes.js');
 dotenv.config();
 
 const app = express();
@@ -63,6 +64,7 @@ app.use("/api/testimonials", testimonialRoutes);
 app.use("/api/store-locations", storeLocationRoutes);
 app.use("/api/registration", registrationRoutes);
 app.use("/api/application", applicationRoutes);
+app.use("/api/lead",leadRoutes);
 
 // ** Add Gold Rate Routes **
 app.use("/api/goldrate", goldRateRoutes); // <-- Added this line
