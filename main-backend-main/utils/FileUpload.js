@@ -26,7 +26,7 @@ const fileFilter = (req, file, cb) => {
         } else {
             cb(
                 new Error(
-                    "Invalid video type. Only mp4, webm, and quicktime are allowed."
+                    "Invalid video type. Only mp4 , webm , and quicktime are allowed."
                 ),
                 false
             );
