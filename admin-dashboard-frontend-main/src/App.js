@@ -46,6 +46,7 @@ import ApplicationList from "./components/application/ApplicationList";
 import ApplicationForm from "./components/application/ApplicationForm";
 import ApplicationView from "./components/application/ApplicationView";
 import GoldRate from "./components/goldrate/GoldRate";
+import LeadList from "./components/lead/LeadList";
 
 
 function App() {
@@ -204,6 +205,10 @@ function App() {
                             <Route
                                 path="application"
                                 element={<ApplicationList />}
+                            />
+                            <Route
+                                path="lead"
+                                element={<LeadList />}
                             />
                             
                             <Route
