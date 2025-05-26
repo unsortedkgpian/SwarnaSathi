@@ -17,7 +17,7 @@ const createLead = async (req, res) => {
       name,
       phone,
       pincode,
-      qualityOfGold: isNaN(Number(qualityOfGold)) ? undefined : Number(qualityOfGold),
+      qualityOfGold ,
       quantityOfGold: isNaN(Number(quantityOfGold)) ? undefined : Number(quantityOfGold),
     });
 
@@ -80,8 +80,70 @@ const getLeadByPhone = async (req, res) => {
   }
 };
 
+const updateLeadVerificationStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isVerified } = req.body;
+
+    const lead = await Lead.findByIdAndUpdate(
+      id,
+      { isVerified },
+      { new: true }
+    );
+
+    if (!lead) {
+      return res.status(404).json({
+        success: false,
+        message: 'Lead not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: lead,
+    });
+  } catch (error) {
+    console.error('Error updating verification status:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+const deleteLeadById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const lead = await Lead.findByIdAndDelete(id);
+
+    if (!lead) {
+      return res.status(404).json({
+        success: false,
+        message: 'Lead not found',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Lead deleted successfully',
+    });
+  } catch (error) {
+    console.error('Error deleting lead:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+
+
+
 module.exports = {
   createLead,
   getAllLeads,
   getLeadByPhone,
+  updateLeadVerificationStatus,
+  deleteLeadById
 };

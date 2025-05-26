@@ -2,7 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { createLead , 
     getAllLeads,
-  getLeadByPhone } = require('../controllers/leadController');
+  getLeadByPhone ,
+updateLeadVerificationStatus ,
+deleteLeadById} = require('../controllers/leadController');
 
 // POST new lead
 router.post('/', createLead);
@@ -10,5 +12,9 @@ router.post('/', createLead);
 router.get('/', getAllLeads);
 // GET lead by phone
 router.get('/:phone', getLeadByPhone);
+
+router.patch('/:id/verify', updateLeadVerificationStatus);
+
+router.delete('/:id', deleteLeadById);
 
 module.exports = router;
