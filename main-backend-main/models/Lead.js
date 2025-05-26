@@ -1,10 +1,10 @@
 // models/Lead.js
+const { toString } = require('express-validator/lib/utils');
 const mongoose = require('mongoose');
 
 const leadSchema = new mongoose.Schema({
   leadId: {
-    type: String,
-    unique: true,  
+    type: String, 
   },
   name: {
     type: String,
@@ -20,10 +20,14 @@ const leadSchema = new mongoose.Schema({
     required: true,
   },
   qualityOfGold: {
-    type: Number, 
+    type: String, 
   },
   quantityOfGold: {
     type: Number,
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
   },
   createdAt: {
     type: Date,
