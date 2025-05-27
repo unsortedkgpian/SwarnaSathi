@@ -125,7 +125,15 @@ export default function LeadList() {
                                         <td className="px-6 py-4 text-sm text-gray-900">{lead.pincode}</td>
                                         <td className="px-6 py-4 text-sm text-gray-900">{lead.qualityOfGold || '-'}</td>
                                         <td className="px-6 py-4 text-sm text-gray-900">{lead.quantityOfGold || '-'}</td>
-                                        <td className="px-6 py-4 text-sm text-gray-900">{new Date(lead.createdAt).toLocaleDateString()}</td>
+                                        <td className="px-6 py-4 text-sm text-gray-900">{new Date(lead.createdAt).toLocaleString('en-US', {
+                                                                                            year: 'numeric',
+                                                                                            month: 'short',
+                                                                                            day: 'numeric',
+                                                                                            hour: '2-digit',
+                                                                                            minute: '2-digit',
+                                                                                            second: '2-digit',
+                                                                                            hour12: true,
+                                                                                            })}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         <input
                                             type="checkbox"
