@@ -33,7 +33,11 @@ const leadSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+},
+{
+  timestamps: true,
+}
+);
 
 // Automatically set leadId in format YYMMSSmmmmm before saving
 leadSchema.pre('save', function (next) {

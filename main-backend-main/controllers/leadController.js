@@ -1,10 +1,20 @@
 const Lead = require('../models/Lead');
-
+const Pincode = require('../models/Pincode');
 // Create new lead
 const createLead = async (req, res) => {
   try {
     const { name, phone, pincode, qualityOfGold, quantityOfGold } = req.body;
 
+    // Check if pincode exists in Pincode schema
+    const pincodeExists = await Pincode.findOne({ pincode: pincode });
+    if (!pincodeExists) {
+      return res.status(400).json({
+        success: false,
+        message: "We don't serve in this location.",
+      });
+    }
+
+    // Check if lead with this phone already exists
     const existingLead = await Lead.findOne({ phone });
     if (existingLead) {
       return res.status(400).json({
@@ -13,11 +23,12 @@ const createLead = async (req, res) => {
       });
     }
 
+    // Create new lead
     const newLead = new Lead({
       name,
       phone,
       pincode,
-      qualityOfGold ,
+      qualityOfGold,
       quantityOfGold: isNaN(Number(quantityOfGold)) ? undefined : Number(quantityOfGold),
     });
 

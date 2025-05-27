@@ -32,6 +32,8 @@ const loanFormRoutes = require("./routes/loanForm.routes.js")
 const partnerFormRoutes = require("./routes/partnerForm.routes.js")
 const referralRoutes = require("./routes/referral.routes.js")
 const leadRoutes = require('./routes/lead.routes.js');
+const pincodeRoutes = require('./routes/pincode.routes.js');
+
 
 
 dotenv.config();
@@ -70,6 +72,7 @@ app.use("/api/store-locations", storeLocationRoutes);
 app.use("/api/registration", registrationRoutes);
 app.use("/api/application", applicationRoutes);
 app.use("/api/lead",leadRoutes);
+app.use('/api/pincode', pincodeRoutes);
 
 // ** Add Gold Rate Routes **
 app.use("/api/goldrate", goldRateRoutes); // <-- Added this line
