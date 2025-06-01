@@ -10,7 +10,7 @@ const createLead = async (req, res) => {
     if (!pincodeExists) {
       return res.status(400).json({
         success: false,
-        message: "We don't serve in this location.",
+        message: "We are not currently serviceable in this location. We will contact you once we get there. Thank you for showing interest in Swarn Sathi",
       });
     }
 
