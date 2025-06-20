@@ -27,7 +27,7 @@ const bannerSchema = new mongoose.Schema({
   media: {
     file: {
       type: String,
-      required: function() {
+      required: function () {
         return this.backgroundType !== 'youtube';
       }
     },
@@ -41,7 +41,7 @@ const bannerSchema = new mongoose.Schema({
   // For YouTube Videos
   youtubeUrl: {
     type: String,
-    required: function() {
+    required: function () {
       return this.backgroundType === 'youtube';
     }
   },
@@ -69,13 +69,13 @@ const bannerSchema = new mongoose.Schema({
 });
 
 // Generate YouTube embed code
-bannerSchema.virtual('youtubeEmbed').get(function() {
+bannerSchema.virtual('youtubeEmbed').get(function () {
   if (this.backgroundType !== 'youtube' || !this.youtubeUrl) return null;
-  
+
   // Extract video ID from URL
   const videoId = extractYouTubeVideoId(this.youtubeUrl);
   if (!videoId) return null;
-  
+
   return `https://www.youtube.com/embed/${videoId}`;
 });
 

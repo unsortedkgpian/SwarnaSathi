@@ -34,7 +34,7 @@ const QuickstepsSectionSchema = new mongoose.Schema({
   steps: {
     type: [QuickstepSchema],
     validate: {
-      validator: function(val) {
+      validator: function (val) {
         return val.length <= 4;
       },
       message: 'A maximum of 4 steps are allowed.'
