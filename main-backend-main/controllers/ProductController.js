@@ -68,22 +68,22 @@ exports.getProductSections = async (req, res) => {
  */
 exports.createProduct = [
   upload.single('iconFile'),
-   async (req, res) => {
+  async (req, res) => {
     try {
       // (Assume req.user is set by your JWT middleware if needed)
-      const { title, description,category, seo } = req.body;
+      const { title, description, category, seo } = req.body;
       console.log(req.body);
       console.log("category", category);
       // Parse SEO data if provided as a string.
       const seoData = seo ? (typeof seo === "string" ? JSON.parse(seo) : seo) : {};
-      
+
       let productData = {
         title,
         description,
         category,
         seo: seoData
       };
-  
+
       // Process the icon file if uploaded.
       if (req.file) {
         // req.file.location is provided by multer-s3
@@ -97,7 +97,7 @@ exports.createProduct = [
           message: "Icon file is required."
         });
       }
-      
+
       const product = await Product.create(productData);
       res.status(201).json({ success: true, data: product });
     } catch (error) {
@@ -120,12 +120,12 @@ exports.updateProduct = [
           .status(404)
           .json({ success: false, message: "Product not found" });
       }
-  
-      const { title, description,category, seo } = req.body;
+
+      const { title, description, category, seo } = req.body;
       if (title) product.title = title;
       if (description) product.description = description;
       if (category) product.category = category;
-  
+
       if (seo) {
         let seoData;
         // If seo is a string, parse it; otherwise, assume it's an object.
@@ -143,14 +143,14 @@ exports.updateProduct = [
         // Update the product's seo field (merging with existing data if needed)
         product.seo = { ...product.seo, ...seoData };
       }
-  
+
       // If a new icon file is uploaded, update the icon field with its S3 URL.
       if (req.file) {
         product.icon = req.file.location;
       } else if (req.body.icon) {
         product.icon = req.body.icon;
       }
-  
+
       const updatedProduct = await product.save();
       res.json({ success: true, data: updatedProduct });
     } catch (error) {
@@ -179,7 +179,7 @@ exports.updateProductSections = [
       let mainSection = req.body.mainSection;
       let quickstepsSection = req.body.quickstepsSection;
       let benefitsSection = req.body.benefitsSection;
-      
+
       if (typeof mainSection === "string") {
         mainSection = JSON.parse(mainSection);
       }
@@ -189,18 +189,18 @@ exports.updateProductSections = [
       if (typeof benefitsSection === "string") {
         benefitsSection = JSON.parse(benefitsSection);
       }
-  
+
       const product = await Product.findById(req.params.id);
       if (!product)
         return res.status(404).json({ message: "Product not found" });
-  
+
       // Update mainSection as provided.
       if (mainSection !== undefined) {
         product.mainSection = mainSection;
       }
-  
+
       // --- Process Quicksteps Section ---
-  
+
       // Filter the files by field name
       const quickstepsSectionImageFiles = req.files.filter(
         (file) => file.fieldname === "quickstepsSectionImage"
@@ -208,7 +208,7 @@ exports.updateProductSections = [
       const quickstepIconFiles = req.files.filter(
         (file) => file.fieldname === "quickstepIcon"
       );
-  
+
       if (quickstepsSection !== undefined) {
         // If a new quickstepsSection image file is uploaded, update it;
         // otherwise, preserve the existing image.
@@ -217,7 +217,7 @@ exports.updateProductSections = [
         } else {
           quickstepsSection.image = product.quickstepsSection.image;
         }
-  
+
         // Update each step’s icon:
         // Loop through the steps array and, if there’s a corresponding uploaded file,
         // set the step’s icon to that file’s S3 URL.
@@ -239,15 +239,15 @@ exports.updateProductSections = [
             }
           });
         }
-  
+
         product.quickstepsSection = quickstepsSection;
       }
-  
+
       // --- Process Benefits Section ---
       if (benefitsSection !== undefined) {
         product.benefitsSection = benefitsSection;
       }
-  
+
       const updatedProduct = await product.save();
       res.json({
         success: true,
@@ -270,7 +270,7 @@ exports.deleteProduct = async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (!product)
       return res.status(404).json({ message: 'Product not found' });
-    
+
     // Use deleteOne() on the retrieved document
     await product.deleteOne();
     res.json({ message: 'Product deleted' });

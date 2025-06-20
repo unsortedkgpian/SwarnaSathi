@@ -1,5 +1,34 @@
 const Lead = require('../models/Lead');
 const Pincode = require('../models/Pincode');
+
+const checkPincode = async (req, res) => {
+  const { pincode, phone } = req.body;
+  const pincodeExists = await Pincode.findOne({ pincode: pincode });
+  if (!pincodeExists) {
+    return res.status(400).json({
+      success: false,
+      message: "We are not currently serviceable in this location. We will contact you once we get there. Thank you for showing interest in Swarn Sathi",
+    });
+  }
+  const existingLead = await Lead.findOne({ phone });
+  if (existingLead) {
+    return res.status(400).json({
+      success: false,
+      message: "A lead with this phone number already exists.",
+    });
+  }
+
+
+  return res.status(200).json({
+    success: true,
+    message: "OTP sent to your phone number",
+    data: {
+      pincodeExists,
+      existingLead
+    }
+  });
+};
+
 // Create new lead
 const createLead = async (req, res) => {
   try {
@@ -22,6 +51,8 @@ const createLead = async (req, res) => {
         message: 'A lead with this phone number already exists.',
       });
     }
+
+
 
     // Create new lead
     const newLead = new Lead({
@@ -156,5 +187,6 @@ module.exports = {
   getAllLeads,
   getLeadByPhone,
   updateLeadVerificationStatus,
-  deleteLeadById
+  deleteLeadById,
+  checkPincode
 };

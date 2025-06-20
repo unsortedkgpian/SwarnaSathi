@@ -108,9 +108,12 @@ const fs = require("fs");
 const path = require("path");
 
 exports.createApplication = async (req, res) => {
+    console.log("Creating application  1");
     try {
+        console.log("Creating application");
         // Check if file was uploaded
         if (!req.file) {
+            console.log("No file uploaded");
             return res.status(400).json({ message: "Resume file is required" });
         }
 
@@ -210,7 +213,7 @@ exports.getAllApplications = async (req, res) => {
 exports.getApplication = async (req, res) => {
     try {
         const application = await Application.findById(req.params.id)// Exclude the file path for security
-        
+
         if (!application) {
             return res.status(404).json({ message: "Application not found" });
         }
@@ -235,7 +238,7 @@ exports.downloadResume = async (req, res) => {
 
         res.setHeader('Content-Type', application.resume.mimeType);
         res.setHeader('Content-Disposition', `attachment; filename="${application.resume.originalName}"`);
-        
+
         const fileStream = fs.createReadStream(filePath);
         fileStream.pipe(res);
     } catch (error) {
@@ -252,7 +255,7 @@ exports.updateApplication = async (req, res) => {
         }
 
         let updateData = req.body;
-        
+
         // Handle resume update if new file is uploaded
         if (req.file) {
             // Delete old resume file

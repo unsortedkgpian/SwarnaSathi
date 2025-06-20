@@ -3,6 +3,7 @@ const { sendPhoneOTP, verifyPhoneOTP } = require("../helpers/otpHelper");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+
 // Generate JWT Token
 const generateToken = (id, role) => {
     return jwt.sign({ id, role }, process.env.JWT_SECRET, {
@@ -87,7 +88,7 @@ exports.createFormSubmission = async (req, res) => {
 // Send OTP to a phone number
 exports.sendOTP = async (req, res) => {
     try {
-        const { phone, loanType } = req.body;
+        const { phone, loanType, pincode } = req.body;
 
         // Validate required fields
         if (!phone) {
@@ -122,8 +123,7 @@ exports.sendOTP = async (req, res) => {
 
             // Log for debugging
             console.log(
-                `OTP ${otp} generated for ${phone} (Loan type: ${
-                    loanType || "gold-loan"
+                `OTP ${otp} generated for ${phone} (Loan type: ${loanType || "gold-loan"
                 })`
             );
 
@@ -487,8 +487,8 @@ exports.getMyApplications = async (req, res) => {
         }
 
         // Find all submissions with the user's phone number
-        const applications = await FormSubmission.find({ 
-            phone: req.user.phone 
+        const applications = await FormSubmission.find({
+            phone: req.user.phone
         }).sort({ createdAt: -1 }); // Sort by newest first
 
         res.status(200).json({
@@ -497,10 +497,10 @@ exports.getMyApplications = async (req, res) => {
         });
     } catch (error) {
         console.error("Error fetching applications:", error);
-        res.status(500).json({ 
-            success: false, 
-            message: "Server error", 
-            error: error.message 
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message
         });
     }
 };

@@ -5,110 +5,110 @@ const { validationResult } = require('express-validator');
 const sendEmail = require('../utils/sendEmail');
 
 exports.getSettings = async (req, res) => {
+  try {
+    const settings = await Setting.findOne();
+    res.status(200).json({
+      success: true,
+      data: settings || null
+    });
+  } catch (error) {
+    console.error('Error in getSettings:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error',
+      error: error.message
+    });
+  }
+};
+
+// Create or Update Settings
+exports.createOrUpdateSettings = [
+  upload.fields([
+    { name: 'navbarLogo', maxCount: 1 },
+    { name: 'favicon', maxCount: 1 }
+  ]),
+  async (req, res) => {
     try {
-      const settings = await Setting.findOne();
-      res.status(200).json({
-        success: true,
-        data: settings || null
-      });
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const settingsData = {
+        phoneNumbers: req.body.phoneNumbers ? JSON.parse(req.body.phoneNumbers) : [],
+        emails: req.body.emails ? JSON.parse(req.body.emails) : [],
+        addresses: req.body.addresses ? JSON.parse(req.body.addresses) : [],
+        contactEmail: req.body.contactEmail || ''
+      };
+
+      if (req.files) {
+        if (req.files.navbarLogo) settingsData.navbarLogo = req.files.navbarLogo[0].location;
+        if (req.files.favicon) settingsData.favicon = req.files.favicon[0].location;
+      }
+
+      const existingSettings = await Setting.findOne();
+      if (existingSettings) {
+        const updatedSettings = await Setting.findOneAndUpdate(
+          {},
+          { $set: settingsData },
+          { new: true, runValidators: true }
+        );
+        return res.status(200).json({
+          success: true,
+          data: updatedSettings,
+          message: 'Settings updated successfully'
+        });
+      } else {
+        // Removed strict requirement for navbarLogo and favicon
+        const newSettings = new Setting({
+          navbarLogo: settingsData.navbarLogo || '', // Default to empty string if not provided
+          favicon: settingsData.favicon || '',       // Default to empty string if not provided
+          phoneNumbers: settingsData.phoneNumbers,
+          emails: settingsData.emails,
+          addresses: settingsData.addresses,
+          contactEmail: settingsData.contactEmail || 'default@yourdomain.com'
+        });
+        await newSettings.save();
+        return res.status(201).json({
+          success: true,
+          data: newSettings,
+          message: 'Settings created successfully'
+        });
+      }
     } catch (error) {
-      console.error('Error in getSettings:', error);
+      console.error('Error in createOrUpdateSettings:', error);
       res.status(500).json({
         success: false,
         message: 'Server error',
         error: error.message
       });
     }
-  };
-  
-  // Create or Update Settings
-  exports.createOrUpdateSettings = [
-    upload.fields([
-      { name: 'navbarLogo', maxCount: 1 },
-      { name: 'favicon', maxCount: 1 }
-    ]),
-    async (req, res) => {
-      try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-          return res.status(400).json({ errors: errors.array() });
-        }
-  
-        const settingsData = {
-          phoneNumbers: req.body.phoneNumbers ? JSON.parse(req.body.phoneNumbers) : [],
-          emails: req.body.emails ? JSON.parse(req.body.emails) : [],
-          addresses: req.body.addresses ? JSON.parse(req.body.addresses) : [],
-          contactEmail: req.body.contactEmail || ''
-        };
-  
-        if (req.files) {
-          if (req.files.navbarLogo) settingsData.navbarLogo = req.files.navbarLogo[0].location;
-          if (req.files.favicon) settingsData.favicon = req.files.favicon[0].location;
-        }
-  
-        const existingSettings = await Setting.findOne();
-        if (existingSettings) {
-          const updatedSettings = await Setting.findOneAndUpdate(
-            {},
-            { $set: settingsData },
-            { new: true, runValidators: true }
-          );
-          return res.status(200).json({
-            success: true,
-            data: updatedSettings,
-            message: 'Settings updated successfully'
-          });
-        } else {
-          // Removed strict requirement for navbarLogo and favicon
-          const newSettings = new Setting({
-            navbarLogo: settingsData.navbarLogo || '', // Default to empty string if not provided
-            favicon: settingsData.favicon || '',       // Default to empty string if not provided
-            phoneNumbers: settingsData.phoneNumbers,
-            emails: settingsData.emails,
-            addresses: settingsData.addresses,
-            contactEmail: settingsData.contactEmail || 'default@yourdomain.com'
-          });
-          await newSettings.save();
-          return res.status(201).json({
-            success: true,
-            data: newSettings,
-            message: 'Settings created successfully'
-          });
-        }
-      } catch (error) {
-        console.error('Error in createOrUpdateSettings:', error);
-        res.status(500).json({
-          success: false,
-          message: 'Server error',
-          error: error.message
-        });
-      }
-    }
-  ];
+  }
+];
 
 exports.sendContact = async (req, res) => {
-    try {
-      const { name, email, phone, purpose, comments } = req.body;
-  
-      if (!name || !email || !phone || !purpose || !comments) {
-        return res.status(400).json({
-          success: false,
-          message: 'Please provide all required fields: name, email, phone, purpose, and comments'
-        });
-      }
-  
-      const settings = await Setting.findOne();
-      if (!settings || !settings.contactEmail) {
-        return res.status(500).json({
-          success: false,
-          message: 'Contact email not configured in settings'
-        });
-      }
-  
-      const recipientEmail = settings.contactEmail;
-      console.log(recipientEmail);
-      const emailSubject = `New Contact Form Submission: ${purpose}`;
-      const emailContent = `
+  try {
+    const { name, email, phone, purpose, comments } = req.body;
+
+    if (!name || !email || !phone || !purpose || !comments) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide all required fields: name, email, phone, purpose, and comments'
+      });
+    }
+
+    const settings = await Setting.findOne();
+    if (!settings || !settings.contactEmail) {
+      return res.status(500).json({
+        success: false,
+        message: 'Contact email not configured in settings'
+      });
+    }
+
+    const recipientEmail = settings.contactEmail;
+    console.log(recipientEmail);
+    const emailSubject = `New Contact Form Submission: ${purpose}`;
+    const emailContent = `
         <h2>New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
@@ -116,27 +116,27 @@ exports.sendContact = async (req, res) => {
         <p><strong>Purpose:</strong> ${purpose}</p>
         <p><strong>Comments:</strong> ${comments}</p>
       `;
-  
-      await sendEmail({
-        from: process.env.FROM_EMAIL, // Backend config email
-        email: recipientEmail,       // To contactEmail from settings
-        subject: emailSubject,
-        data:{content: emailContent}
-      });
-  
-      res.status(200).json({
-        success: true,
-        message: 'Contact form submitted successfully. We will get back to you soon!'
-      });
-    } catch (error) {
-      console.error('Error in sendContact:', error);
-      res.status(500).json({
-        success: false,
-        message: 'Error sending contact form',
-        error: error.message
-      });
-    }
-  };
+
+    await sendEmail({
+      from: process.env.FROM_EMAIL, // Backend config email
+      email: recipientEmail,       // To contactEmail from settings
+      subject: emailSubject,
+      data: { content: emailContent }
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Contact form submitted successfully. We will get back to you soon!'
+    });
+  } catch (error) {
+    console.error('Error in sendContact:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error sending contact form',
+      error: error.message
+    });
+  }
+};
 
 // Update Branding (navbarLogo and favicon)
 exports.updateBranding = [
@@ -197,7 +197,7 @@ exports.updatePhoneNumber = async (req, res) => {
     const phoneIndex = settings.phoneNumbers.findIndex(
       phone => phone._id.toString() === phoneId
     );
-    
+
     if (phoneIndex === -1) {
       return res.status(404).json({
         success: false,
@@ -243,7 +243,7 @@ exports.updateEmail = async (req, res) => {
     const emailIndex = settings.emails.findIndex(
       e => e._id.toString() === emailId
     );
-    
+
     if (emailIndex === -1) {
       return res.status(404).json({
         success: false,
@@ -288,7 +288,7 @@ exports.updateAddress = async (req, res) => {
     const addressIndex = settings.addresses.findIndex(
       addr => addr._id.toString() === addressId
     );
-    
+
     if (addressIndex === -1) {
       return res.status(404).json({
         success: false,

@@ -77,15 +77,15 @@ exports.createSection = async (req, res) => {
  */
 
 exports.getSection = async (req, res) => {
-    try {
-        let desk = await InvestorDesk.findOne();
-        if (!desk) return res.status(404).json({ message: 'Investor desk not found' });
-        const section = desk.sections.id(req.params.sectionId);
-        if (!section) return res.status(404).json({ message: 'Section not found' });
-        res.json(section);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
+  try {
+    let desk = await InvestorDesk.findOne();
+    if (!desk) return res.status(404).json({ message: 'Investor desk not found' });
+    const section = desk.sections.id(req.params.sectionId);
+    if (!section) return res.status(404).json({ message: 'Section not found' });
+    res.json(section);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 exports.updateSection = async (req, res) => {
@@ -109,18 +109,18 @@ exports.updateSection = async (req, res) => {
  * Admin endpoint to delete a section.
  */
 exports.deleteSection = async (req, res) => {
-    try {
-      let desk = await InvestorDesk.findOne();
-      if (!desk) return res.status(404).json({ message: 'Investor desk not found' });
-      const section = desk.sections.id(req.params.sectionId);
-      if (!section) return res.status(404).json({ message: 'Section not found' });
-      section.deleteOne();
-      await desk.save();
-      res.json({ message: 'Section deleted' });
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  };
+  try {
+    let desk = await InvestorDesk.findOne();
+    if (!desk) return res.status(404).json({ message: 'Investor desk not found' });
+    const section = desk.sections.id(req.params.sectionId);
+    if (!section) return res.status(404).json({ message: 'Section not found' });
+    section.deleteOne();
+    await desk.save();
+    res.json({ message: 'Section deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 /**
  * POST /api/investor-desk/sections/:sectionId/documents
@@ -136,7 +136,7 @@ exports.addDocument = async (req, res) => {
     if (!desk) return res.status(404).json({ message: 'Investor desk not found' });
     const section = desk.sections.id(req.params.sectionId);
     if (!section) return res.status(404).json({ message: 'Section not found' });
-    
+
     // req.file is provided by Multer (using Amazon S3) and includes req.file.location for the file URL.
     const newDoc = {
       title: title || req.file.originalname,
@@ -172,12 +172,12 @@ exports.updateDocument = async (req, res) => {
     if (!doc) return res.status(404).json({ message: 'Document not found' });
     if (title) doc.title = title;
     if (req.file) {
-        doc.fileUrl = req.file.location;         // S3 URL
-        doc.filename = req.file.originalname;      // Original file name
-        // Optionally, if your schema stores file size or mimetype, update those:
-        doc.size = req.file.size;
-        // doc.mimeType = req.file.mimetype;
-      }
+      doc.fileUrl = req.file.location;         // S3 URL
+      doc.filename = req.file.originalname;      // Original file name
+      // Optionally, if your schema stores file size or mimetype, update those:
+      doc.size = req.file.size;
+      // doc.mimeType = req.file.mimetype;
+    }
     await desk.save();
     res.json(doc);
   } catch (err) {
@@ -190,20 +190,20 @@ exports.updateDocument = async (req, res) => {
  * Admin endpoint to delete a document from a section.
  */
 exports.deleteDocument = async (req, res) => {
-    try {
-      let desk = await InvestorDesk.findOne();
-      if (!desk) return res.status(404).json({ message: 'Investor desk not found' });
-      const section = desk.sections.id(req.params.sectionId);
-      if (!section) return res.status(404).json({ message: 'Section not found' });
-      const doc = section.documents.id(req.params.docId);
-      if (!doc) return res.status(404).json({ message: 'Document not found' });
-      doc.deleteOne();
-      await desk.save();
-      res.json({ message: 'Document deleted' });
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  };
+  try {
+    let desk = await InvestorDesk.findOne();
+    if (!desk) return res.status(404).json({ message: 'Investor desk not found' });
+    const section = desk.sections.id(req.params.sectionId);
+    if (!section) return res.status(404).json({ message: 'Section not found' });
+    const doc = section.documents.id(req.params.docId);
+    if (!doc) return res.status(404).json({ message: 'Document not found' });
+    doc.deleteOne();
+    await desk.save();
+    res.json({ message: 'Document deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 /**
  * GET /api/investor-desk/sections/:sectionId/documents/:docId
  * Admin endpoint to get the details of a single document.
