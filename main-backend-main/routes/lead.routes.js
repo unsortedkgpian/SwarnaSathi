@@ -5,7 +5,8 @@ const { createLead,
   getLeadByPhone,
   updateLeadVerificationStatus,
   deleteLeadById,
-  checkPincode } = require('../controllers/leadController');
+  checkPincode ,
+deleteAllLeads} = require('../controllers/leadController');
 
 // POST new lead
 router.post('/check-pincode', checkPincode);
@@ -18,5 +19,6 @@ router.get('/:phone', getLeadByPhone);
 router.patch('/:id/verify', updateLeadVerificationStatus);
 
 router.delete('/:id', deleteLeadById);
+router.delete('/', deleteAllLeads);
 
 module.exports = router;
