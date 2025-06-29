@@ -32,7 +32,7 @@ const checkPincode = async (req, res) => {
 // Create new lead
 const createLead = async (req, res) => {
   try {
-    const { name, phone, pincode, qualityOfGold, quantityOfGold } = req.body;
+    const { name, phone, pincode, qualityOfGold, quantityOfGold , leadId } = req.body;
 
     // Check if pincode exists in Pincode schema
     const pincodeExists = await Pincode.findOne({ pincode: pincode });
@@ -56,6 +56,7 @@ const createLead = async (req, res) => {
 
     // Create new lead
     const newLead = new Lead({
+      leadId,
       name,
       phone,
       pincode,
@@ -179,6 +180,23 @@ const deleteLeadById = async (req, res) => {
   }
 };
 
+const deleteAllLeads = async (req, res) => {
+  try {
+    const result = await Lead.deleteMany({}); // delete all documents
+
+    return res.status(200).json({
+      success: true,
+      message: `Deleted ${result.deletedCount} leads successfully`,
+    });
+  } catch (error) {
+    console.error('Error deleting all leads:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal Server Error',
+    });
+  }
+};
+
 
 
 
@@ -188,5 +206,6 @@ module.exports = {
   getLeadByPhone,
   updateLeadVerificationStatus,
   deleteLeadById,
-  checkPincode
+  checkPincode,
+  deleteAllLeads
 };
